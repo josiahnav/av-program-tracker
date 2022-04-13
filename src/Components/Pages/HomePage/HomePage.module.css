@@ -1,0 +1,8 @@
+.project-input {
+  border: 1px solid black;
+  border-radius: 5px;
+  width: 50%;
+  margin: 1em 0;
+  padding: 1em 1em; 
+  font-size: 1em;
+}
