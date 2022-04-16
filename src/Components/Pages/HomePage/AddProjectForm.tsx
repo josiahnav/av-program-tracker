@@ -1,12 +1,23 @@
-import {Fragment, useState} from "react";
-
+import {Fragment, useReducer} from "react";
+import Project from "../../../Models/Project";
 import classes from "./HomePage.module.css";
 
-const AddProjectForm = (props: any) => {
-  const [projectNumber, setProjectNumber] = useState(0);
-  const [projectName, setProjectName] = useState("");
-  const [projectType, setProjectType] = useState("");
+const projectReducer = (state: any, action: any) => {
+  switch(action.id) {
+    case "projectNumber":
+      return { ...state, number: +action.value};
+    case "projectName":
+      return {...state, name: action.value};
+    case "projectType":
+      return {...state, type: action.value};
+  } 
+}
 
+const AddProjectForm = (props: any) => {
+  const defaultProject: Project = new Project();
+
+  const [projectState, dispatchProject] = useReducer(projectReducer, defaultProject);
+  
   const projectNumberId: string = "projectNumber";
   const projectNameId: string = "projectName";
   const projectTypeId: string = "projectType";
@@ -14,24 +25,12 @@ const AddProjectForm = (props: any) => {
   const projectTypes: string[] = ["Crestron", "Amx", "Extron"];
 
   const onChange = (event: any) => {
-    switch(event.target.id) {
-      case projectNumberId:
-        setProjectNumber(+event.target.value);
-        break;
-      case projectNameId:
-        setProjectName(event.target.value);
-        break;
-      case projectTypeId:
-        setProjectType(event.target.value);
-        break;
-    }
+   dispatchProject({id: event.target.id, value: event.target.value}); 
   }
 
   const onSubmitHandler = (event: any) => {
     event.preventDefault();
-    console.log("projectNumber", projectNumber);
-    console.log("projectName", projectName);
-    console.log("projectType", projectType);
+    props.onSubmit(projectState);
   };
 
   return(
