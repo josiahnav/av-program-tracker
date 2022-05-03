@@ -1,6 +1,10 @@
-import {Fragment, useReducer} from "react";
+import {Fragment, useState, useReducer, useContext} from "react";
+
 import Project from "../../../Models/Project";
-import classes from "./HomePage.module.css";
+import ProjectsContext from '../../../Contexts/projects-context';
+
+import classes from './AddProjectForm.module.css';
+import Input from '../../Common/Input';
 
 const projectReducer = (state: any, action: any) => {
   switch(action.id) {
@@ -14,6 +18,9 @@ const projectReducer = (state: any, action: any) => {
 }
 
 const AddProjectForm = (props: any) => {
+  const ctx = useContext(ProjectsContext);
+  const [projectNumberIsValid, setProjectNumberIsValid] = useState(true);
+
   const defaultProject: Project = new Project();
 
   const [projectState, dispatchProject] = useReducer(projectReducer, defaultProject);
@@ -24,11 +31,20 @@ const AddProjectForm = (props: any) => {
   
   const projectTypes: string[] = ["Crestron", "Amx", "Extron"];
 
-  const onChange = (event: any) => {
-   dispatchProject({id: event.target.id, value: event.target.value}); 
+  const projectNumberChangeHandler = (event: any) => {
+    setProjectNumberIsValid(!ctx.projects.has(+event.target.value));
+    dispatchProject({id: event.target.id, value: event.target.value});
   }
 
-  const onSubmitHandler = (event: any) => {
+  const projectNameChangeHandler = (event: any) => {
+    dispatchProject({id: event.target.id, value: event.target.value});
+  }
+
+  const projectTypeChangeHandler = (event: any) => {
+    dispatchProject({id: event.target.id, value: event.target.value});
+  }
+
+  const submitHandler = (event: any) => {
     event.preventDefault();
     props.onSubmit(projectState);
   };
@@ -36,18 +52,31 @@ const AddProjectForm = (props: any) => {
   return(
     <Fragment>
       <h2>Please enter project details:</h2>
-      <form onSubmit={onSubmitHandler}>
-        <label htmlFor="projectNumber">Number:</label>
-        <br/>
-        <input className={classes["project-input"]} id={projectNumberId} type="number" onChange={onChange}/>
-        <br/>
-        <label htmlFor={projectNumberId}>Name:</label>
-        <br/>
-        <input className={classes["project-input"]} id={projectNameId} type="string" onChange={onChange}/> 
-        <br/>
+      <form onSubmit={submitHandler}>
+        <Input
+          label={"Number:"}
+          id={projectNumberId}
+          type={"number"}
+          placeholder="Unique project number"
+          isValid={projectNumberIsValid}
+          onChange={projectNumberChangeHandler}
+          />
+        <Input
+            label={"Name:"}
+            id={projectNameId}
+            type={"text"}
+            placeholder="Project name"
+            isValid={true}
+            onChange={projectNameChangeHandler}
+        />
         <label htmlFor={projectTypeId}>Type:</label>
         <br/>
-        <select className={classes["project-input"]} id={projectTypeId} name="type" onChange={onChange}>
+        <select
+            className={classes["project-input"]}
+            id={projectTypeId}
+            name="type"
+            onChange={projectTypeChangeHandler}
+        >
           {projectTypes.map( type => {
             return(
               <option value={type} key={type}>{type}</option>
@@ -55,7 +84,7 @@ const AddProjectForm = (props: any) => {
           })}  
         </select>
         <br/>
-        <button>Submit</button>
+        <button disabled={!projectNumberIsValid}>Submit</button>
       </form>
     </Fragment>
   );

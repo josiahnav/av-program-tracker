@@ -4,6 +4,8 @@ import HomePage from './Components/Pages/HomePage/HomePage';
 import Header from './Components/Common/Header';
 import ProjectsProvider from './Contexts/ProjectsProvider';
 
+import './App.css';
+
 function App() {
     return (
         <ProjectsProvider>

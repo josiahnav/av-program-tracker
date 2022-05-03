@@ -5,7 +5,9 @@ import AddProjectForm from "./AddProjectForm";
 import ProjectsContext from '../../../Contexts/projects-context';
 import ProjectList from './ProjectList';
 
-const HomePage = (props: any) => {
+import classes from './HomePage.module.css'
+
+const HomePage = () => {
   const ctx = useContext(ProjectsContext);
 
   const onSubmitHandler = (project: Project) =>  {
@@ -13,8 +15,7 @@ const HomePage = (props: any) => {
   }
 
   return(
-    <section>
-      {ctx.projects.size === 0 && <div>No projects saved!</div>}
+    <section className={classes.home}>
       <AddProjectForm onSubmit={onSubmitHandler}/>
       {ctx.projects.size > 0 && <ProjectList/>}
     </section>
