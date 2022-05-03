@@ -7,8 +7,8 @@ import {solid} from '@fortawesome/fontawesome-svg-core/import.macro';
 const Header = () => {
     return(
         <header className={classes.header}>
-            <FontAwesomeIcon icon={solid('coffee')}/>
-            A/V Program Tracker
+            <FontAwesomeIcon icon={solid('microphone')} fixedWidth={true}/>
+            <span className={classes.title}>A/V Program Tracker</span>
         </header>
     );
 }

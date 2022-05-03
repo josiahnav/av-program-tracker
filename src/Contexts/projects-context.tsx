@@ -1,5 +1,11 @@
 import React from "react";
 
-const ProjectsContext = React.createContext([]);
+import Project from '../Models/Project';
+
+const ProjectsContext = React.createContext({
+    projects: new Map<number, Project>(),
+    addProject: (project: Project) => {},
+    removeProject: (projectId: number) => {}
+});
 
 export default ProjectsContext;
